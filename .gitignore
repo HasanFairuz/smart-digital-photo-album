@@ -1,0 +1,31 @@
+# Local credentials/configuration (never commit)
+**/config.h
+**/secrets.h
+**/credentials.h
+.env
+.env.*
+!.env.example
+
+# Personal photo archives and LittleFS upload data
+**/data/**
+!**/data/.gitkeep
+**/private-photos/**
+
+# IDE, intermediate builds and binaries
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+**/build/
+**/.pio/
+*.elf
+*.bin
+*.map
+*.hex
+
+# Archived exports and backups
+*.zip
+*.7z
+*.rar
