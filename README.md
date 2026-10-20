@@ -32,13 +32,33 @@ The prototype has been **compiled, uploaded, and tested on the assembled device*
 - **Responsive interface:** Screen-state logic, timed transitions, GPIO input handling, and a FreeRTOS-based refresh task.
 - **Physical enclosure:** 3D-printable CAD/STL models and corresponding CAD images have been developed for the prototype.
 
-## 🎥 Prototype Media & Mechanical Design
+## 📷 Prototype Photos & Mechanical Design
 
-The repository includes photographs of the assembled device, a demonstration video, **STL files for 3D printing**, and images of the enclosure CAD models. Together, these document the physical build as well as the firmware.
+The photographs below document the working physical prototype and stages of hardware integration. These are **actual project images**, not illustrative renders.
 
-> **Media linking note:** The exact paths of your recently uploaded photos, video, and STL/CAD images were not included with the supplied README. Once you verify their filenames in GitHub, add direct links or thumbnails here. Do not commit personal photos or sensitive information in the demonstration material.
+| Completed mini photo album | Clock/weather display |
+|:---:|:---:|
+| ![Completed smart digital photo album](media/Mini%20Photo%20Album.png) | ![Clock and weather interface](media/Clock%20Display.png) |
 
-For the hardware drawings and component information, see [Electrical schematic](hardware/electrical-schematic.png), [Physical wiring diagram](hardware/physical-wiring-diagram.png), and [Bill of Materials](hardware/BOM.md).
+| Early breadboard prototype | PCB-board prototype | Under-display connections |
+|:---:|:---:|:---:|
+| ![Early breadboard prototype](media/Early%20Breadboard%20Prototype.jpg) | ![PCB-board prototype](media/PCB%20Board%20Prototype.png) | ![Connections beneath display](media/Under%20Display%20Connections.jpg) |
+
+### 🧱 CAD Renders & 3D-Printable Parts
+
+| Housing render | Housing sketch | Additional CAD render |
+|:---:|:---:|:---:|
+| ![CAD housing render](mechanical/renders/CAD%20Housing%20Render.png) | ![CAD housing sketch](mechanical/renders/CAD%20Housing%20Sketch.png) | ![Additional CAD render](mechanical/renders/CAD%20Render.png) |
+
+**Available STL files:**
+
+- [Front Housing 4.0.STL](mechanical/CAD/Front%20Housing%204.0.STL)
+- [Rear Housing 5.0.STL](mechanical/CAD/Rear%20Housing%205.0.STL)
+- [Rear Housing 6.0.STL](mechanical/CAD/Rear%20Housing%206.0.STL)
+
+These files represent available design iterations. Review geometry, tolerances, print orientation, and fit against the actual parts before using them for a new build; later revision numbers do not independently establish compatibility with every other file.
+
+**Demonstration video:** A video link can be added once its repository location or published URL is confirmed. No video filename was visible in the provided directory listing, so no unverified link is included here.
 
 ## 🧩 System Architecture
 
@@ -84,11 +104,11 @@ The assembled prototype uses a display module with a regulator suitable for its 
 
 ### Electrical Schematic
 
-![ESP32-S3 electrical schematic](hardware/electrical-schematic.png)
+![ESP32-S3 electrical schematic](hardware/smart_photo_album_schematic.png)
 
 ### Physical Wiring Diagram
 
-![ESP32-S3 physical wiring diagram](hardware/physical-wiring-diagram.png)
+![ESP32-S3 physical wiring diagram](hardware/smart_photo_album_physical_wiring.png)
 
 **Additional hardware files:** [BOM with estimated CAD replacement costs](hardware/BOM.md). The BOM costs are estimates, **not actual historical purchase prices**.
 
@@ -99,7 +119,7 @@ The assembled prototype uses a display module with a regulator suitable for its 
 - **External libraries:** Adafruit GFX Library; Adafruit ST7735 and ST7789 Library; ArduinoJson; JPEGDEC (Larry Bank).
 - The firmware contains LEDC compatibility handling for different Arduino-ESP32 core versions. **ArduinoJson 6** is the safest starting point for its `DynamicJsonDocument` usage until other versions are verified.
 
-Exact dependency versions and Arduino IDE board-menu settings should be recorded from the tested development environment if a fully reproducible build is required.
+For a fully reproducible build, record the exact dependency versions and Arduino IDE board-menu settings from the tested development environment.
 
 ## 🚀 Build, Configure & Run
 
@@ -133,16 +153,39 @@ See **[Hardware Testing & Validation](docs/TEST_PLAN.md)** for the test table, o
 
 ## 📁 Repository Guide
 
-| Location | Contents |
-|---|---|
-| [`firmware/OurPhotoAlbum/`](firmware/OurPhotoAlbum/) | Arduino source and public configuration template |
-| [`hardware/`](hardware/) | Electrical schematic, physical wiring diagram, and estimated BOM |
-| [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md) | Installation and private configuration guidance |
-| [`docs/TEST_PLAN.md`](docs/TEST_PLAN.md) | Manual functional verification results |
-| `.gitignore` | Excludes private configuration and non-public development assets |
-| Other media and CAD directories | Prototype photographs, demonstration video, STL prints, and CAD images; verify exact paths before linking |
+```text
+smart-digital-photo-album/
+├── README.md
+├── .gitignore
+├── docs/
+│   ├── CONFIGURATION.md
+│   └── TEST_PLAN.md
+├── firmware/
+│   └── OurPhotoAlbum/
+│       ├── OurPhotoAlbum.ino
+│       └── config.example.h
+├── hardware/
+│   ├── BOM.md
+│   ├── smart_photo_album_physical_wiring.png
+│   └── smart_photo_album_schematic.png
+├── mechanical/
+│   ├── CAD/
+│   │   ├── Front Housing 4.0.STL
+│   │   ├── Rear Housing 5.0.STL
+│   │   └── Rear Housing 6.0.STL
+│   └── renders/
+│       ├── CAD Housing Render.png
+│       ├── CAD Housing Sketch.png
+│       └── CAD Render.png
+└── media/
+    ├── Clock Display.png
+    ├── Early Breadboard Prototype.jpg
+    ├── Mini Photo Album.png
+    ├── PCB Board Prototype.png
+    └── Under Display Connections.jpg
+```
 
-`firmware/OurPhotoAlbum/config.h` exists **only on the developer's computer** and must not be committed.
+The locally created `firmware/OurPhotoAlbum/config.h` contains private configuration and is **intentionally excluded from Git**. The screenshot used for this directory inventory did not display a video file; include one in the README only after its path has been confirmed.
 
 ## ⚠️ Known Limitations & Future Improvements
 
