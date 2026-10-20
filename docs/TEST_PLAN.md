@@ -3,6 +3,7 @@
 
 **Project:** Smart Digital Photo Album & Weather Display  
 **Developer:** Hasan Fairuz  
+**Test Date:** 2026-10-19
 **Firmware:** v1.5  
 **Hardware:** ESP32-S3 SuperMini, ST7789 TFT Display  
 **Testing Method:** Manual Functional Verification
