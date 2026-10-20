@@ -1,128 +1,167 @@
-# Smart Digital Photo Album & Weather Display
+<div align="center">
 
-**ESP32-S3 SuperMini · ST7789 240 × 240 TFT · Arduino C++ · LittleFS · JPEGDEC**
+# 📸 Smart Digital Photo Album & Weather Display
 
-A microcontroller-based digital photo album that displays preloaded images and provides an on-demand clock, date, and current-weather display. Physical buttons control photo navigation and weather refresh. The system is designed to keep the offline photo-album function usable even without Wi-Fi.
+**ESP32-S3 SuperMini · 1.54-inch ST7789 TFT · Arduino C++ · Wi-Fi · LittleFS**
 
-> **Project status:** Firmware preserved from working personal prototype v1.5, with local settings externalized for safer publication. The redistributed configuration arrangement has **not yet been compiled or validated on hardware**. A public demonstration, PCB/wiring schematic, enclosure CAD and measured benchmarks can be added after verification.
+A compact, custom-built embedded photo album that displays locally stored photographs and provides an on-demand clock, date, and current-weather interface—controlled using two physical push buttons.
 
-## Features
+[![Firmware](https://img.shields.io/badge/Firmware-v1.5-007ACC?style=for-the-badge)](firmware/OurPhotoAlbum/OurPhotoAlbum.ino)
+[![Hardware](https://img.shields.io/badge/Hardware-ESP32--S3-E7352C?style=for-the-badge)](#-hardware-design)
+[![Testing](https://img.shields.io/badge/Testing-Manual_Functional_Verification-198754?style=for-the-badge)](docs/TEST_PLAN.md)
+[![Portfolio](https://img.shields.io/badge/Engineering_Portfolio-Visit-0F766E?style=for-the-badge)](https://hasanfairuz.com)
 
-- Local 240 × 240 JPEG photos decoded with JPEGDEC from ESP32 LittleFS.
-- Three-stage album presentation with short animation/title introduction, timed progression, and button-advance support.
-- Clock and date synchronized using SNTP/NTP with POSIX timezone and daylight-saving rules.
-- Current conditions via the [Open-Meteo API](https://open-meteo.com/en/docs): temperature, WMO weather code, wind speed and day/night.
-- Three configurable priority-ordered Wi-Fi networks, with scanning and connection fallback.
-- Button-controlled refresh using a FreeRTOS task; temporary refresh UI has a bounded 3-second display duration.
-- Display backlight timeout and operation without network access; missing unsynchronized values are represented by dashes.
+</div>
 
-## Hardware
+---
 
-| Component | Role |
-| --- | --- |
-| ESP32-S3 SuperMini | Application controller, Wi-Fi, file storage |
-| ST7789 1.54-inch TFT, 240 × 240 | Color graphics and photo presentation |
-| Two push buttons | Album/next and weather/info refresh |
-| Reset/EN button | Hardware reset |
-| Appropriate power supply and wiring | Power and electrical interconnect |
+## 🔎 Project Overview
 
-### Pin assignments (as defined in firmware)
+This personal mechatronics project combines embedded programming, electronics integration, graphical interface design, and 3D-printable mechanical design. An **ESP32-S3 SuperMini** drives a **240 × 240 ST7789 display** and reads two physical buttons. Photographs are decoded from local **LittleFS** storage; Wi-Fi is used to synchronize time and retrieve current weather through **Open-Meteo**.
 
-| Signal | ESP32-S3 GPIO |
-| --- | --- |
-| TFT backlight (BL) | 7 |
-| TFT reset (RST) | 8 |
-| TFT data/command (DC) | 9 |
-| TFT chip select (CS) | 10 |
-| TFT MOSI | 11 |
-| TFT SCLK | 12 |
-| Album button (active LOW) | 2 |
-| Refresh button (active LOW) | 3 |
+The prototype has been **compiled, uploaded, and tested on the assembled device**. Its principal functions were checked by operating the buttons and visually inspecting the display. See the [hardware validation report](docs/TEST_PLAN.md) for the scope and limitations of that testing. Offline functionality is implemented in firmware but the complete offline/reconnection test sequence remains to be formally documented.
 
-**Boot caution:** GPIO3 is an ESP32-S3 strapping pin. Do not hold the refresh button during reset or power-up. Verify display power requirements and logic voltage against your actual module before wiring.
+### ✨ Key Features
 
-## Software and dependencies
+- **Digital photo album:** Displays up to 25 locally stored 240 × 240 baseline JPEG images, using JPEGDEC and LittleFS.
+- **Physical interaction:** Dedicated buttons for entering/navigating the album and refreshing the information screen.
+- **Clock and date:** Network time synchronization with configurable timezone and daylight-saving rules.
+- **Current weather:** Temperature, weather condition, wind speed, and day/night information from the Open-Meteo API.
+- **Multi-network Wi-Fi:** Configurable network list, scanning, connection attempts, and fallback behaviour.
+- **Offline-oriented design:** Locally stored photographs remain independent of a weather-data connection; missing unsynchronized information is represented by placeholders.
+- **Responsive interface:** Screen-state logic, timed transitions, GPIO input handling, and a FreeRTOS-based refresh task.
+- **Physical enclosure:** 3D-printable CAD/STL models and corresponding CAD images have been developed for the prototype.
 
-- [Arduino IDE](https://www.arduino.cc/en/software) with the **ESP32 by Espressif Systems** board package, using a board definition appropriate for your ESP32-S3 SuperMini.
-- Built-in ESP32 libraries: `WiFi`, `WiFiClientSecure`, `HTTPClient`, `SPI`, `LittleFS`, `time`, `esp_arduino_version`.
-- External Arduino libraries: **Adafruit GFX Library**, **Adafruit ST7735 and ST7789 Library**, **ArduinoJson**, **JPEGDEC** (Larry Bank).
-- ESP32 core includes an explicit compatibility branch for LEDC backlight APIs before versus after Arduino-ESP32 3.x. The sketch also uses `DynamicJsonDocument`; ArduinoJson 6 is the safest starting version until version-7 compatibility is verified.
+## 🎥 Prototype Media & Mechanical Design
 
-Library versions, board-menu options and exact filesystem-upload method should be recorded after a successful clean rebuild.
+The repository includes photographs of the assembled device, a demonstration video, **STL files for 3D printing**, and images of the enclosure CAD models. Together, these document the physical build as well as the firmware.
 
-## Repository layout
+> **Media linking note:** The exact paths of your recently uploaded photos, video, and STL/CAD images were not included with the supplied README. Once you verify their filenames in GitHub, add direct links or thumbnails here. Do not commit personal photos or sensitive information in the demonstration material.
+
+For the hardware drawings and component information, see [Electrical schematic](hardware/electrical-schematic.png), [Physical wiring diagram](hardware/physical-wiring-diagram.png), and [Bill of Materials](hardware/BOM.md).
+
+## 🧩 System Architecture
 
 ```text
-firmware/OurPhotoAlbum/
-  OurPhotoAlbum.ino       Main Arduino sketch
-  config.example.h       Safe local-settings template; tracked
-  config.h               Private local settings; create it yourself, untracked
-docs/
-  CONFIGURATION.md       Configuration and publishing guidance
-  TEST_PLAN.md           Repeatable smoke-test checklist
-.gitignore               Excludes local secrets, photos and builds
-README.md                This document
+Album button (GPIO2) ─┐
+                      ├──> ESP32-S3 firmware / display-state logic ──> ST7789 TFT
+Refresh button (GPIO3)┘                     ▲
+                                           │
+LittleFS photos ──> JPEGDEC ────────────────┤
+Wi-Fi ──> NTP / timezone ───────────────────┤
+      └──> Open-Meteo API / JSON ──────────┘
 ```
 
-## Set up and run
+- `setup()` initializes the display, SPI interface, button handling, photo filesystem, and startup services.
+- `loop()` handles user inputs, slideshow progression, screen rendering, and display timeouts.
+- A GPIO interrupt captures album-button activity; a FreeRTOS task handles network-information refresh.
+- JPEGDEC processes locally stored photographs for rendering on the TFT.
 
-1. Install Arduino IDE, the ESP32 board package, and the four external libraries listed above.
-2. Open `firmware/OurPhotoAlbum/OurPhotoAlbum.ino` in Arduino IDE.
-3. Copy `config.example.h` to `config.h` **in the same directory** and edit only your own local copy. See [configuration guidance](docs/CONFIGURATION.md).
-4. Set three known Wi-Fi SSIDs/passwords (or adjust `WIFI_COUNT` and both arrays consistently); select a public weather coordinate and correct POSIX timezone.
-5. Prepare baseline JPEGs named `.jpg` or `.jpeg`, exactly **240 × 240 pixels**, and upload them to the device's LittleFS filesystem using a filesystem uploader compatible with your Arduino IDE and ESP32 core. Up to **25** images are indexed. Keep personal photos out of the public repository.
-6. Choose the correct board, USB/port, partition scheme with adequate LittleFS space, and flash the sketch.
-7. Open Serial Monitor at **115200 baud** for status and diagnostics; follow the [test plan](docs/TEST_PLAN.md).
+## 🔌 Hardware Design
 
-**Important:** Sketch uploads and LittleFS filesystem-image uploads are distinct operations. Flashing the sketch alone will not populate the photo storage. The exact filesystem-uploader procedure depends on your Arduino IDE/ESP32 core combination.
+| Component | Function |
+|---|---|
+| ESP32-S3 SuperMini | Firmware execution, Wi-Fi, local file storage, and peripheral control |
+| 1.54-inch ST7789 TFT, 240 × 240 | Photo album and information display |
+| Two normally-open momentary buttons | Album navigation and clock/weather refresh |
+| USB-C power connection | Supplies power to the development board |
+| Connecting wires and mechanical enclosure | Electrical interconnect and physical packaging |
 
-## User controls
+### Firmware Pin Map
 
-| Control | Behavior |
-| --- | --- |
-| Album button (GPIO2) | Enters album mode, advances intro/title/photos, and restarts the timed photo session as appropriate |
-| Refresh button (GPIO3) | Exits album mode, displays refresh screen for approximately 3 seconds, then displays clock/weather for approximately 10 seconds |
-| Reset/EN | Reboots the device and triggers startup initialization and Wi-Fi selection |
+| ESP32-S3 GPIO | Connection | Function |
+|---|---|---|
+| GPIO7 | TFT BL/BLK | Backlight control |
+| GPIO8 | TFT RST/RES | Display reset |
+| GPIO9 | TFT DC | Data/command selection |
+| GPIO10 | TFT CS | SPI chip select |
+| GPIO11 | TFT SDA/MOSI | SPI data |
+| GPIO12 | TFT SCL/SCLK | SPI clock |
+| GPIO2 | Album button to GND | Active-LOW input; internal pull-up |
+| GPIO3 | Refresh button to GND | Active-LOW input; internal pull-up |
 
-The initial information screen also times out after approximately 10 seconds. The album sequence uses approximately 3-second animation and title intervals and 5-second photo intervals. These are configured near the beginning of the sketch.
+The assembled prototype uses a display module with a regulator suitable for its documented **5 V VCC** supply and onboard backlight interface circuitry, as confirmed for the specific module used. **Do not assume interchangeable ST7789 breakout boards support the same wiring.** GPIO3 is intentionally used as a button input; because it is an ESP32-S3 strapping pin, the refresh button should not be held during power-up or reset. The physical pin positions in the drawings correspond to the SuperMini board used in this build.
 
-## Architecture overview
+### Electrical Schematic
 
-```text
-Physical buttons ─────────► Screen-state / album-state logic ──► ST7789 TFT
-                                 ▲              ▲
-LittleFS JPEG files ─► JPEGDEC ┘              │
-                                                │
-Wi-Fi ──► NTP / POSIX timezone ────────────────┤
-      └─► Open-Meteo JSON weather endpoint ─────┘
-```
+![ESP32-S3 electrical schematic](hardware/electrical-schematic.png)
 
-- `setup()` initializes SPI, display/backlight, button handling, LittleFS photo index and Wi-Fi/time/weather startup state.
-- `loop()` handles button events, advances the slideshow state machine, redraws the clock and implements screen timeouts.
-- An interrupt latches quick album-button presses. A FreeRTOS task handles weather refresh to keep its loading screen responsive.
-- `fetchWeather()` downloads JSON current conditions and maps WMO codes to custom drawn weather icons.
-- JPEGDEC callbacks stream image data from LittleFS into the TFT using RGB565 pixel blocks.
+### Physical Wiring Diagram
 
-## Engineering decisions and limitations
+![ESP32-S3 physical wiring diagram](hardware/physical-wiring-diagram.png)
 
-- **Photo constraints:** Exactly 240 × 240 baseline JPEGs; images in other sizes are rejected. File count capped at 25.
-- **Online services:** Weather needs Wi-Fi. Time needs an initial successful synchronization; a clock that has synced may continue running while offline.
-- **Network retry:** Firmware attempts visible configured networks first, then unseen configured networks; the exact total connection duration depends on scanning and each attempt timeout, not a global 10-second deadline.
-- **TLS security:** The current weather client calls `client.setInsecure()`, **disabling TLS certificate verification**. This is an outstanding security improvement, not a recommended secure production configuration.
-- **Concurrency:** Shared refresh flags and weather state are accessed across tasks; additional synchronization and race-condition tests are recommended for future revisions.
-- **Reproducibility:** Hardware wiring, exact board-menu settings and performance benchmarks must be confirmed on the actual build.
-- **Personalization:** The original firmware includes a Canada/UK themed animation. Review title and visual assets before wider release.
+**Additional hardware files:** [BOM with estimated CAD replacement costs](hardware/BOM.md). The BOM costs are estimates, **not actual historical purchase prices**.
 
-## Validation
+## 🧰 Software & Dependencies
 
-See [docs/TEST_PLAN.md](docs/TEST_PLAN.md) for startup, offline behavior, buttons, photo indexing, refresh and time-zone checks. This package has been **statically reviewed but not compiled or hardware-tested** in this environment.
+- **Arduino IDE** with **ESP32 by Espressif Systems** board support for the ESP32-S3 SuperMini.
+- **ESP32 core libraries:** `WiFi`, `WiFiClientSecure`, `HTTPClient`, `SPI`, `LittleFS`, and standard time utilities.
+- **External libraries:** Adafruit GFX Library; Adafruit ST7735 and ST7789 Library; ArduinoJson; JPEGDEC (Larry Bank).
+- The firmware contains LEDC compatibility handling for different Arduino-ESP32 core versions. **ArduinoJson 6** is the safest starting point for its `DynamicJsonDocument` usage until other versions are verified.
 
-## Credits and data services
+Exact dependency versions and Arduino IDE board-menu settings should be recorded from the tested development environment if a fully reproducible build is required.
 
-Weather data: [Open-Meteo](https://open-meteo.com/) (check current attribution and usage terms before distributing an application). Time synchronization uses public NTP services. External software libraries retain their respective licenses.
+## 🚀 Build, Configure & Run
 
-## Author and portfolio
+1. Install Arduino IDE, the appropriate ESP32 board package, and the external libraries listed above.
+2. Open [`firmware/OurPhotoAlbum/OurPhotoAlbum.ino`](firmware/OurPhotoAlbum/OurPhotoAlbum.ino).
+3. In the same sketch folder, copy `config.example.h` to **`config.h`** and enter your own Wi-Fi SSIDs/passwords, weather location, timezone, and NTP configuration. See [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md).
+4. Prepare **240 × 240 baseline JPEG** images (`.jpg`/`.jpeg`) for LittleFS. The firmware indexes up to **25** photos. Keep private photographs outside version control.
+5. Upload the image files to LittleFS using a filesystem uploader compatible with your installed Arduino IDE and ESP32 core. **Uploading the sketch alone does not upload LittleFS photos.**
+6. Select the correct ESP32-S3 board, port, and a partition scheme with adequate LittleFS space; compile and upload the firmware.
+7. Open Serial Monitor at **115200 baud** for diagnostics and follow the [functional test document](docs/TEST_PLAN.md).
 
-**Hasan Fairuz** — Mechatronic Systems Engineering, Simon Fraser University. [GitHub profile](https://github.com/HasanFairuz) · [Engineering portfolio](https://icarus909.com)
+**Security:** Keep `config.h` untracked and excluded by `.gitignore`. Review the repository history before public release; ignore rules do not remove previously committed secrets.
 
-*Project source is provided for engineering demonstration and learning. No repository license has been chosen; permission to reuse the author's code is not automatically granted.*
+## 🎛️ Controls & Operating Behaviour
+
+| Control | Behaviour |
+|---|---|
+| Album button — GPIO2 | Opens the photo album and advances its introduction, title, and photos |
+| Refresh button — GPIO3 | Leaves album mode, shows a refresh screen, and returns to clock/weather information |
+| Reset/EN | Restarts the system and reinitializes the startup sequence |
+
+The firmware configures approximately **3-second** introductory/title and refresh intervals, **5 seconds** per photo, and **10 seconds** for the information screen. These are programmed durations, not independently measured timing benchmarks.
+
+## ✅ Testing & Validation
+
+The assembled prototype successfully ran firmware **v1.5** using the externalized local configuration. Initial **manual functional verification** covered successful upload/startup, normal Wi-Fi connection, clock and weather display, photo rendering, slideshow operation, both physical buttons, and screen transitions.
+
+Testing was based on observed behaviour of the actual device—not automated test coverage or calibrated measurements. **Offline and reconnection scenarios, extended endurance, precise timing, and electrical performance remain outside the documented initial validation.**
+
+See **[Hardware Testing & Validation](docs/TEST_PLAN.md)** for the test table, observations, and outstanding tests.
+
+## 📁 Repository Guide
+
+| Location | Contents |
+|---|---|
+| [`firmware/OurPhotoAlbum/`](firmware/OurPhotoAlbum/) | Arduino source and public configuration template |
+| [`hardware/`](hardware/) | Electrical schematic, physical wiring diagram, and estimated BOM |
+| [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md) | Installation and private configuration guidance |
+| [`docs/TEST_PLAN.md`](docs/TEST_PLAN.md) | Manual functional verification results |
+| `.gitignore` | Excludes private configuration and non-public development assets |
+| Other media and CAD directories | Prototype photographs, demonstration video, STL prints, and CAD images; verify exact paths before linking |
+
+`firmware/OurPhotoAlbum/config.h` exists **only on the developer's computer** and must not be committed.
+
+## ⚠️ Known Limitations & Future Improvements
+
+- **Network security:** The current weather client uses `setInsecure()`, which disables TLS certificate validation. Implement proper certificate verification for secure deployment.
+- **Offline recovery:** Verify complete startup-without-Wi-Fi and reconnection workflows on hardware.
+- **Input/boot considerations:** GPIO3 is a strapping pin; avoid holding its button at reset.
+- **Hardware interchangeability:** Substitute TFT modules may have different power or backlight requirements.
+- **Photo constraints:** Only 240 × 240 baseline JPEGs are supported; a maximum of 25 photos is indexed.
+- **Reliability:** Long-term operation, race conditions, current draw, and actual display timing have not been formally characterized.
+
+## 🙌 Acknowledgements
+
+Weather information is provided through [Open-Meteo](https://open-meteo.com/), and time synchronization uses network time services. Third-party firmware libraries remain subject to their respective licenses and attribution requirements.
+
+## 👤 Author
+
+**Hasan Fairuz**  
+Mechatronic Systems Engineering · Simon Fraser University
+
+[![GitHub](https://img.shields.io/badge/GitHub-HasanFairuz-181717?style=flat-square&logo=github)](https://github.com/HasanFairuz) [![Portfolio](https://img.shields.io/badge/Portfolio-hasanfairuz.com-0F766E?style=flat-square)](https://hasanfairuz.com)
+
+*This repository documents an independently developed engineering prototype. No repository license has been selected; public availability alone does not grant permission to reuse the author's code.*
