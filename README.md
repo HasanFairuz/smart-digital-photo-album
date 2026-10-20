@@ -58,7 +58,13 @@ The photographs below document the working physical prototype and stages of hard
 
 These files represent available design iterations. Review geometry, tolerances, print orientation, and fit against the actual parts before using them for a new build; later revision numbers do not independently establish compatibility with every other file.
 
-**Demonstration video:** A video link can be added once its repository location or published URL is confirmed. No video filename was visible in the provided directory listing, so no unverified link is included here.
+### 🎬 Demonstration Video
+
+[![Watch the Smart Digital Photo Album demonstration](media/Clock%20Display.png)](media/Demo%20Video.mp4)
+
+**[▶ Watch the prototype demonstration (MP4)](media/Demo%20Video.mp4)**
+
+The video is stored in this repository. Select the preview image or the link above to open the demonstration. Playback behaviour depends on the browser and GitHub's file viewer.
 
 ## 🧩 System Architecture
 
@@ -179,13 +185,14 @@ smart-digital-photo-album/
 │       └── CAD Render.png
 └── media/
     ├── Clock Display.png
+    ├── Demo Video.mp4
     ├── Early Breadboard Prototype.jpg
     ├── Mini Photo Album.png
     ├── PCB Board Prototype.png
     └── Under Display Connections.jpg
 ```
 
-The locally created `firmware/OurPhotoAlbum/config.h` contains private configuration and is **intentionally excluded from Git**. The screenshot used for this directory inventory did not display a video file; include one in the README only after its path has been confirmed.
+The locally created `firmware/OurPhotoAlbum/config.h` contains private configuration and is **intentionally excluded from Git**. The demonstration video is included at `media/Demo Video.mp4`.
 
 ## ⚠️ Known Limitations & Future Improvements
 
