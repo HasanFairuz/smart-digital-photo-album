@@ -60,11 +60,9 @@ These files represent available design iterations. Review geometry, tolerances, 
 
 ### 🎬 Demonstration Video
 
-[![Watch the Smart Digital Photo Album demonstration](media/Clock%20Display.png)](media/Demo%20Video.mp4)
+https://github.com/user-attachments/assets/26e81b32-a19b-4aca-b0bc-055c35bc259e
 
-**[▶ Watch the prototype demonstration (MP4)](media/Demo%20Video.mp4)**
-
-The video is stored in this repository. Select the preview image or the link above to open the demonstration. Playback behaviour depends on the browser and GitHub's file viewer.
+Watch the Smart Digital Photo Album in action, demonstrating its interactive photo slideshow, clock, weather display, and physical controls.
 
 ## 🧩 System Architecture
 
